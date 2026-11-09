@@ -1,0 +1,6 @@
+@PapayAgenda.Api_HostAddress = http://localhost:5183
+
+GET {{PapayAgenda.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
