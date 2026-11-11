@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PapaiAgenda.Domain.Entities;
+using PapayAgenda.Domain.Entities;
 
-namespace PapaiAgenda.Infrastructure.Data
+namespace PapayAgenda.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {

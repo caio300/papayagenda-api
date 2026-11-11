@@ -1,6 +1,6 @@
-using PapaiAgenda.Domain.Enums;
+using PapayAgenda.Domain.Enums;
 
-namespace PapaiAgenda.Domain.Entities
+namespace PapayAgenda.Domain.Entities
 {
     public class Agendamento
     {

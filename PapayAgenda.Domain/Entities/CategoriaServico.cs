@@ -1,4 +1,4 @@
-namespace PapaiAgenda.Domain.Entities
+namespace PapayAgenda.Domain.Entities
 {
     public class CategoriaServico
     {

@@ -1,4 +1,4 @@
-namespace PapaiAgenda.Domain.Enums
+namespace PapayAgenda.Domain.Enums
 {
     public enum StatusAgendamento
     {

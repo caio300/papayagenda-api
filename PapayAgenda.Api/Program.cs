@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PapaiAgenda.Infrastructure.Data;
+using PapayAgenda.Infrastructure.Data;
+using PapayAgenda.Application.Interfaces;
+using PapayAgenda.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IEstabelecimentoService, EstabelecimentoService>();
 
 var app = builder.Build();
 
