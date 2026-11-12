@@ -34,7 +34,7 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.ToTable("AgendamentoServico");
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.Agendamento", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.Agendamento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.ToTable("Agendamentos");
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.CategoriaServico", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.CategoriaServico", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.ToTable("CategoriasServico");
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.Estabelecimento", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.Estabelecimento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -152,7 +152,7 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.ToTable("Estabelecimentos");
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.Servico", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.Servico", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,22 +188,22 @@ namespace PapayAgenda.Infrastructure.Migrations
 
             modelBuilder.Entity("AgendamentoServico", b =>
                 {
-                    b.HasOne("PapaiAgenda.Domain.Entities.Agendamento", null)
+                    b.HasOne("PapayAgenda.Domain.Entities.Agendamento", null)
                         .WithMany()
                         .HasForeignKey("AgendamentoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PapaiAgenda.Domain.Entities.Servico", null)
+                    b.HasOne("PapayAgenda.Domain.Entities.Servico", null)
                         .WithMany()
                         .HasForeignKey("ServicosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.Agendamento", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.Agendamento", b =>
                 {
-                    b.HasOne("PapaiAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
+                    b.HasOne("PapayAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
                         .WithMany("Agendamentos")
                         .HasForeignKey("EstabelecimentoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -212,9 +212,9 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.Navigation("Estabelecimento");
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.CategoriaServico", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.CategoriaServico", b =>
                 {
-                    b.HasOne("PapaiAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
+                    b.HasOne("PapayAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
                         .WithMany("Categorias")
                         .HasForeignKey("EstabelecimentoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -223,15 +223,15 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.Navigation("Estabelecimento");
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.Servico", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.Servico", b =>
                 {
-                    b.HasOne("PapaiAgenda.Domain.Entities.CategoriaServico", "CategoriaServico")
+                    b.HasOne("PapayAgenda.Domain.Entities.CategoriaServico", "CategoriaServico")
                         .WithMany("Servicos")
                         .HasForeignKey("CategoriaServicoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PapaiAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
+                    b.HasOne("PapayAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
                         .WithMany("Servicos")
                         .HasForeignKey("EstabelecimentoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -242,12 +242,12 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.Navigation("Estabelecimento");
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.CategoriaServico", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.CategoriaServico", b =>
                 {
                     b.Navigation("Servicos");
                 });
 
-            modelBuilder.Entity("PapaiAgenda.Domain.Entities.Estabelecimento", b =>
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.Estabelecimento", b =>
                 {
                     b.Navigation("Agendamentos");
 
