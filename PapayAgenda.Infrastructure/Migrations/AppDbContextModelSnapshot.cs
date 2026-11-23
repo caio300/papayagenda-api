@@ -91,6 +91,9 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.Property<bool>("Ativa")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int?>("CategoriaPaiId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Descricao")
                         .HasColumnType("longtext");
 
@@ -101,7 +104,15 @@ namespace PapayAgenda.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("OrdemExibicao")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("PermiteApenasUmPorAgendamento")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoriaPaiId");
 
                     b.HasIndex("EstabelecimentoId");
 
@@ -167,6 +178,9 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.Property<int>("DuracaoMinutos")
                         .HasColumnType("int");
 
+                    b.Property<bool>("EBrindeOuIncluso")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("EstabelecimentoId")
                         .HasColumnType("int");
 
@@ -214,11 +228,18 @@ namespace PapayAgenda.Infrastructure.Migrations
 
             modelBuilder.Entity("PapayAgenda.Domain.Entities.CategoriaServico", b =>
                 {
+                    b.HasOne("PapayAgenda.Domain.Entities.CategoriaServico", "CategoriaPai")
+                        .WithMany("CategoriasFilhas")
+                        .HasForeignKey("CategoriaPaiId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("PapayAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
                         .WithMany("Categorias")
                         .HasForeignKey("EstabelecimentoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CategoriaPai");
 
                     b.Navigation("Estabelecimento");
                 });
@@ -244,6 +265,8 @@ namespace PapayAgenda.Infrastructure.Migrations
 
             modelBuilder.Entity("PapayAgenda.Domain.Entities.CategoriaServico", b =>
                 {
+                    b.Navigation("CategoriasFilhas");
+
                     b.Navigation("Servicos");
                 });
 

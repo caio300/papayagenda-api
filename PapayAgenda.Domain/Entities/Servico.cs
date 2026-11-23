@@ -7,6 +7,8 @@ namespace PapayAgenda.Domain.Entities
         public decimal Preco { get; set; }
         public int DuracaoMinutos { get; set; }
         public bool Ativo { get; set; } = true;
+        public bool EBrindeOuIncluso { get; set; } = false;
+        public int OrdemExibicao { get; set; } = 1;
 
         // Chave Estrangeira para a Categoria Dinâmica
         public int CategoriaServicoId { get; set; }

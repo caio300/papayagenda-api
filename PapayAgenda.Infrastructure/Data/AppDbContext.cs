@@ -28,6 +28,12 @@ namespace PapayAgenda.Infrastructure.Data
                 .HasMany(a => a.Servicos)
                 .WithMany();
 
+            // Auto-relacionamento Categoria Pai / Filha sem ciclo de cascade delete no MySQL
+            modelBuilder.Entity<CategoriaServico>()
+                .HasOne(c => c.CategoriaPai)
+                .WithMany(c => c.CategoriasFilhas)
+                .HasForeignKey(c => c.CategoriaPaiId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

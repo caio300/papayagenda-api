@@ -16,7 +16,7 @@ namespace PapayAgenda.Application.Services
         }
 
         public async Task<ServicoDto> CriarAsync(CriarServicoDto dto)
-        {        
+        {
             var estabelecimentoExiste = await _context.Estabelecimentos
                 .AnyAsync(e => e.Id == dto.EstabelecimentoId);
 
@@ -39,6 +39,7 @@ namespace PapayAgenda.Application.Services
                 Nome = dto.Nome,
                 Preco = dto.Preco,
                 DuracaoMinutos = dto.DuracaoMinutos,
+                OrdemExibicao = dto.OrdemExibicao > 0 ? dto.OrdemExibicao : 1,
                 CategoriaServicoId = dto.CategoriaServicoId,
                 EstabelecimentoId = dto.EstabelecimentoId,
                 Ativo = true
@@ -54,6 +55,7 @@ namespace PapayAgenda.Application.Services
                 Preco = servico.Preco,
                 DuracaoMinutos = servico.DuracaoMinutos,
                 Ativo = servico.Ativo,
+                OrdemExibicao = servico.OrdemExibicao,
                 CategoriaServicoId = servico.CategoriaServicoId,
                 EstabelecimentoId = servico.EstabelecimentoId
             };
@@ -63,6 +65,8 @@ namespace PapayAgenda.Application.Services
         {
             return await _context.Servicos
                 .Where(s => s.EstabelecimentoId == estabelecimentoId)
+                .OrderBy(s => s.OrdemExibicao)
+                .ThenBy(s => s.Id)
                 .Select(s => new ServicoDto
                 {
                     Id = s.Id,
@@ -70,6 +74,7 @@ namespace PapayAgenda.Application.Services
                     Preco = s.Preco,
                     DuracaoMinutos = s.DuracaoMinutos,
                     Ativo = s.Ativo,
+                    OrdemExibicao = s.OrdemExibicao,
                     CategoriaServicoId = s.CategoriaServicoId,
                     EstabelecimentoId = s.EstabelecimentoId
                 })
@@ -89,6 +94,7 @@ namespace PapayAgenda.Application.Services
                 Preco = s.Preco,
                 DuracaoMinutos = s.DuracaoMinutos,
                 Ativo = s.Ativo,
+                OrdemExibicao = s.OrdemExibicao,
                 CategoriaServicoId = s.CategoriaServicoId,
                 EstabelecimentoId = s.EstabelecimentoId
             };
