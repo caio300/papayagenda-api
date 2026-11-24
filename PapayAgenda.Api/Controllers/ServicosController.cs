@@ -47,5 +47,24 @@ namespace PapayAgenda.Api.Controllers
 
             return Ok(servico);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remover(int id)
+        {
+            try
+            {
+                var removido = await _servicoService.RemoverAsync(id);
+                if (!removido)
+                {
+                    return NotFound(new { mensagem = "Serviço não encontrado." });
+                }
+
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
+        }
     }
 }

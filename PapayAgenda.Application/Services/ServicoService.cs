@@ -86,5 +86,30 @@ namespace PapayAgenda.Application.Services
                 EstabelecimentoId = s.EstabelecimentoId
             };
         }
+
+        public async Task<bool> RemoverAsync(int id)
+        {
+            var servico = await _context.Servicos
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (servico == null)
+            {
+                return false;
+            }
+
+            var possuiAgendamentos = await _context.Agendamentos
+                .AsNoTracking()
+                .AnyAsync(a => a.Servicos.Any(s => s.Id == id));
+
+            if (possuiAgendamentos)
+            {
+                throw new InvalidOperationException(
+                    "Este serviço já possui agendamentos vinculados. Desative-o (Ativo = false) para não afetar o histórico.");
+            }
+
+            _context.Servicos.Remove(servico);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

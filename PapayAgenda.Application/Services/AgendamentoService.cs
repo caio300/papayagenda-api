@@ -50,6 +50,16 @@ namespace PapayAgenda.Application.Services
                 throw new InvalidOperationException("Já existe um agendamento ativo nesse intervalo de horário.");
             }
 
+            var existeBloqueio = await ExisteBloqueioHorarioAsync(
+                dto.EstabelecimentoId,
+                dto.DataHoraInicio,
+                dataHoraFim);
+
+            if (existeBloqueio)
+            {
+                throw new InvalidOperationException("O período selecionado está bloqueado na agenda do estabelecimento.");
+            }
+
             var agendamento = new Agendamento
             {
                 ClienteNome = dto.ClienteNome,
@@ -253,6 +263,16 @@ namespace PapayAgenda.Application.Services
                 throw new InvalidOperationException("Já existe um agendamento ativo nesse intervalo de horário.");
             }
 
+            var existeBloqueio = await ExisteBloqueioHorarioAsync(
+                agendamento.EstabelecimentoId,
+                novaDataHoraInicio,
+                novaDataHoraFim);
+
+            if (existeBloqueio)
+            {
+                throw new InvalidOperationException("O período selecionado está bloqueado na agenda do estabelecimento.");
+            }
+
             agendamento.DataHoraInicio = novaDataHoraInicio;
             agendamento.DataHoraFim = novaDataHoraFim;
 
@@ -315,6 +335,16 @@ namespace PapayAgenda.Application.Services
                 throw new InvalidOperationException("Já existe um agendamento ativo nesse intervalo de horário.");
             }
 
+            var existeBloqueio = await ExisteBloqueioHorarioAsync(
+                dto.EstabelecimentoId,
+                dto.DataHoraInicio,
+                dataHoraFim);
+
+            if (existeBloqueio)
+            {
+                throw new InvalidOperationException("O período selecionado está bloqueado na agenda do estabelecimento.");
+            }
+
             var agendamento = new Agendamento
             {
                 ClienteNome = dto.ClienteNome,
@@ -339,6 +369,8 @@ namespace PapayAgenda.Application.Services
             DateTime inicio,
             DateTime fim,
             int? ignorarAgendamentoId = null)
+
+            
         {
             return _context.Agendamentos
                 .AsNoTracking()
@@ -347,6 +379,15 @@ namespace PapayAgenda.Application.Services
                             && a.Status != StatusAgendamento.Cancelado
                             && a.DataHoraInicio < fim
                             && a.DataHoraFim > inicio);
+        }
+
+        private Task<bool> ExisteBloqueioHorarioAsync(int estabelecimentoId, DateTime inicio, DateTime fim)
+        {
+            return _context.BloqueiosAgenda
+                .AsNoTracking()
+                .AnyAsync(b => b.EstabelecimentoId == estabelecimentoId
+                            && b.DataHoraInicio < fim
+                            && b.DataHoraFim > inicio);
         }
     }
 }

@@ -7,5 +7,6 @@ namespace PapayAgenda.Application.Interfaces
         Task<ServicoDto> CriarAsync(CriarServicoDto dto);
         Task<IEnumerable<ServicoDto>> ObterPorEstabelecimentoAsync(int estabelecimentoId);
         Task<ServicoDto?> ObterPorIdAsync(int id);
+        Task<bool> RemoverAsync(int id);
     }
 }

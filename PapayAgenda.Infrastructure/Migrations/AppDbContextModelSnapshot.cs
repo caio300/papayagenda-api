@@ -82,6 +82,35 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.ToTable("Agendamentos");
                 });
 
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.BloqueioAgenda", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataHoraFim")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DataHoraInicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("DiaInteiro")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("EstabelecimentoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Motivo")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EstabelecimentoId");
+
+                    b.ToTable("BloqueiosAgenda");
+                });
+
             modelBuilder.Entity("PapayAgenda.Domain.Entities.Estabelecimento", b =>
                 {
                     b.Property<int>("Id")
@@ -176,6 +205,17 @@ namespace PapayAgenda.Infrastructure.Migrations
                 {
                     b.HasOne("PapayAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
                         .WithMany("Agendamentos")
+                        .HasForeignKey("EstabelecimentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Estabelecimento");
+                });
+
+            modelBuilder.Entity("PapayAgenda.Domain.Entities.BloqueioAgenda", b =>
+                {
+                    b.HasOne("PapayAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
+                        .WithMany()
                         .HasForeignKey("EstabelecimentoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
