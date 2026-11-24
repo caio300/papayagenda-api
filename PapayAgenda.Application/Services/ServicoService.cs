@@ -25,22 +25,12 @@ namespace PapayAgenda.Application.Services
                 throw new InvalidOperationException($"O estabelecimento com ID {dto.EstabelecimentoId} não foi encontrado.");
             }
 
-            // Valida se a categoria existe e se pertence ao estabelecimento
-            var categoriaExiste = await _context.CategoriasServico
-                .AnyAsync(c => c.Id == dto.CategoriaServicoId && c.EstabelecimentoId == dto.EstabelecimentoId);
-
-            if (!categoriaExiste)
-            {
-                throw new InvalidOperationException($"A categoria informada não existe ou não pertence a este estabelecimento.");
-            }
-
             var servico = new Servico
             {
                 Nome = dto.Nome,
                 Preco = dto.Preco,
                 DuracaoMinutos = dto.DuracaoMinutos,
                 OrdemExibicao = dto.OrdemExibicao > 0 ? dto.OrdemExibicao : 1,
-                CategoriaServicoId = dto.CategoriaServicoId,
                 EstabelecimentoId = dto.EstabelecimentoId,
                 Ativo = true
             };
@@ -56,7 +46,6 @@ namespace PapayAgenda.Application.Services
                 DuracaoMinutos = servico.DuracaoMinutos,
                 Ativo = servico.Ativo,
                 OrdemExibicao = servico.OrdemExibicao,
-                CategoriaServicoId = servico.CategoriaServicoId,
                 EstabelecimentoId = servico.EstabelecimentoId
             };
         }
@@ -75,7 +64,6 @@ namespace PapayAgenda.Application.Services
                     DuracaoMinutos = s.DuracaoMinutos,
                     Ativo = s.Ativo,
                     OrdemExibicao = s.OrdemExibicao,
-                    CategoriaServicoId = s.CategoriaServicoId,
                     EstabelecimentoId = s.EstabelecimentoId
                 })
                 .ToListAsync();
@@ -95,7 +83,6 @@ namespace PapayAgenda.Application.Services
                 DuracaoMinutos = s.DuracaoMinutos,
                 Ativo = s.Ativo,
                 OrdemExibicao = s.OrdemExibicao,
-                CategoriaServicoId = s.CategoriaServicoId,
                 EstabelecimentoId = s.EstabelecimentoId
             };
         }

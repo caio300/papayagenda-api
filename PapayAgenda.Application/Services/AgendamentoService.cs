@@ -17,7 +17,6 @@ namespace PapayAgenda.Application.Services
 
         public async Task<AgendamentoDto> CriarAsync(CriarAgendamentoDto dto)
         {
-            // 1. Validar se o Estabelecimento existe
             var estabelecimentoExiste = await _context.Estabelecimentos
                 .AnyAsync(e => e.Id == dto.EstabelecimentoId);
 
@@ -26,9 +25,7 @@ namespace PapayAgenda.Application.Services
                 throw new InvalidOperationException($"O estabelecimento com ID {dto.EstabelecimentoId} não foi encontrado.");
             }
 
-            // 2. Buscar os serviços com suas respetivas categorias e validar se pertencem ao estabelecimento
             var servicos = await _context.Servicos
-                .Include(s => s.CategoriaServico)
                 .Where(s => dto.ServicoIds.Contains(s.Id) && s.EstabelecimentoId == dto.EstabelecimentoId)
                 .ToListAsync();
 
@@ -37,59 +34,10 @@ namespace PapayAgenda.Application.Services
                 throw new InvalidOperationException("Um ou mais serviços informados não existem ou não pertencem a este estabelecimento.");
             }
 
-            // 3. Validar se a regra de categoria única foi quebrada (Ex: escolheu 2 serviços da categoria "Mãos")
-            var categoriasComRestricao = servicos
-                .GroupBy(s => s.CategoriaServico)
-                .Where(g => g.Key != null && g.Key.PermiteApenasUmPorAgendamento);
-
-            foreach (var grupo in categoriasComRestricao)
-            {
-                if (grupo.Key != null && grupo.Count() > 1)
-                {
-                    throw new InvalidOperationException($"A categoria '{grupo.Key.Nome}' permite apenas a seleção de 1 serviço por agendamento.");
-                }
-            }
-
-            // 3.1 Validar dependência entre Categoria Pai e Categoria Filha
-            var categoriasSelecionadasIds = servicos
-                .Select(s => s.CategoriaServicoId)
-                .Distinct()
-                .ToList();
-
-            var categoriasFilhasObrigatorias = await _context.CategoriasServico
-                .Where(c => c.Ativa
-                    && c.EstabelecimentoId == dto.EstabelecimentoId
-                    && c.CategoriaPaiId != null
-                    && categoriasSelecionadasIds.Contains(c.CategoriaPaiId.Value))
-                .ToListAsync();
-
-            foreach (var categoriaFilha in categoriasFilhasObrigatorias)
-            {
-                if (!categoriasSelecionadasIds.Contains(categoriaFilha.Id))
-                {
-                    throw new InvalidOperationException(
-                        $"É obrigatório selecionar uma opção em '{categoriaFilha.Nome}' ao agendar este serviço.");
-                }
-            }
-
-            foreach (var servico in servicos.Where(s => s.CategoriaServico?.CategoriaPaiId != null))
-            {
-                int categoriaPaiId = servico.CategoriaServico!.CategoriaPaiId!.Value;
-                if (!categoriasSelecionadasIds.Contains(categoriaPaiId))
-                {
-                    throw new InvalidOperationException(
-                        $"O serviço '{servico.Nome}' só pode ser selecionado junto com a categoria principal correspondente.");
-                }
-            }
-
-            // 4. Calcular a duração total (todos os serviços contam para o tempo) e o valor total (ignorando brindes/inclusos como Nail Art)
             int duracaoTotalMinutos = servicos.Sum(s => s.DuracaoMinutos);
             decimal valorTotal = servicos.Where(s => !s.EBrindeOuIncluso).Sum(s => s.Preco);
-
-            // 5. Calcular o horário de término (DataHoraFim)
             var dataHoraFim = dto.DataHoraInicio.AddMinutes(duracaoTotalMinutos);
 
-            // 6. Criar a entidade Agendamento
             var agendamento = new Agendamento
             {
                 ClienteNome = dto.ClienteNome,
@@ -97,7 +45,7 @@ namespace PapayAgenda.Application.Services
                 DataHoraInicio = dto.DataHoraInicio,
                 DataHoraFim = dataHoraFim,
                 ValorTotal = valorTotal,
-                ValorSinal = 0, // Regra de sinal pode ser aplicada futuramente
+                ValorSinal = 0,
                 EstabelecimentoId = dto.EstabelecimentoId,
                 Servicos = servicos
             };
@@ -105,7 +53,6 @@ namespace PapayAgenda.Application.Services
             _context.Agendamentos.Add(agendamento);
             await _context.SaveChangesAsync();
 
-            // 7. Retornar o DTO preenchido
             return new AgendamentoDto
             {
                 Id = agendamento.Id,
@@ -125,7 +72,7 @@ namespace PapayAgenda.Application.Services
                     Preco = s.Preco,
                     DuracaoMinutos = s.DuracaoMinutos,
                     Ativo = s.Ativo,
-                    CategoriaServicoId = s.CategoriaServicoId,
+                    OrdemExibicao = s.OrdemExibicao,
                     EstabelecimentoId = s.EstabelecimentoId
                 }).ToList()
             };
@@ -157,7 +104,7 @@ namespace PapayAgenda.Application.Services
                     Preco = s.Preco,
                     DuracaoMinutos = s.DuracaoMinutos,
                     Ativo = s.Ativo,
-                    CategoriaServicoId = s.CategoriaServicoId,
+                    OrdemExibicao = s.OrdemExibicao,
                     EstabelecimentoId = s.EstabelecimentoId
                 }).ToList()
             });
@@ -190,7 +137,7 @@ namespace PapayAgenda.Application.Services
                     Preco = s.Preco,
                     DuracaoMinutos = s.DuracaoMinutos,
                     Ativo = s.Ativo,
-                    CategoriaServicoId = s.CategoriaServicoId,
+                    OrdemExibicao = s.OrdemExibicao,
                     EstabelecimentoId = s.EstabelecimentoId
                 }).ToList()
             };

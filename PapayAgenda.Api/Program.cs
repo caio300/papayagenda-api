@@ -17,7 +17,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEstabelecimentoService, EstabelecimentoService>();
 builder.Services.AddScoped<IServicoService, ServicoService>();
-builder.Services.AddScoped<ICategoriaServicoService, CategoriaServicoService>();
 builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
 
 var app = builder.Build();

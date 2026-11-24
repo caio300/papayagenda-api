@@ -82,43 +82,6 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.ToTable("Agendamentos");
                 });
 
-            modelBuilder.Entity("PapayAgenda.Domain.Entities.CategoriaServico", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Ativa")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int?>("CategoriaPaiId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("EstabelecimentoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("OrdemExibicao")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("PermiteApenasUmPorAgendamento")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoriaPaiId");
-
-                    b.HasIndex("EstabelecimentoId");
-
-                    b.ToTable("CategoriasServico");
-                });
-
             modelBuilder.Entity("PapayAgenda.Domain.Entities.Estabelecimento", b =>
                 {
                     b.Property<int>("Id")
@@ -132,10 +95,6 @@ namespace PapayAgenda.Infrastructure.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("EmailGestor")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("GoogleCalendarId")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -172,9 +131,6 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("CategoriaServicoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DuracaoMinutos")
                         .HasColumnType("int");
 
@@ -188,12 +144,13 @@ namespace PapayAgenda.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("OrdemExibicao")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Preco")
                         .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoriaServicoId");
 
                     b.HasIndex("EstabelecimentoId");
 
@@ -226,55 +183,20 @@ namespace PapayAgenda.Infrastructure.Migrations
                     b.Navigation("Estabelecimento");
                 });
 
-            modelBuilder.Entity("PapayAgenda.Domain.Entities.CategoriaServico", b =>
-                {
-                    b.HasOne("PapayAgenda.Domain.Entities.CategoriaServico", "CategoriaPai")
-                        .WithMany("CategoriasFilhas")
-                        .HasForeignKey("CategoriaPaiId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PapayAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
-                        .WithMany("Categorias")
-                        .HasForeignKey("EstabelecimentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CategoriaPai");
-
-                    b.Navigation("Estabelecimento");
-                });
-
             modelBuilder.Entity("PapayAgenda.Domain.Entities.Servico", b =>
                 {
-                    b.HasOne("PapayAgenda.Domain.Entities.CategoriaServico", "CategoriaServico")
-                        .WithMany("Servicos")
-                        .HasForeignKey("CategoriaServicoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PapayAgenda.Domain.Entities.Estabelecimento", "Estabelecimento")
                         .WithMany("Servicos")
                         .HasForeignKey("EstabelecimentoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CategoriaServico");
-
                     b.Navigation("Estabelecimento");
-                });
-
-            modelBuilder.Entity("PapayAgenda.Domain.Entities.CategoriaServico", b =>
-                {
-                    b.Navigation("CategoriasFilhas");
-
-                    b.Navigation("Servicos");
                 });
 
             modelBuilder.Entity("PapayAgenda.Domain.Entities.Estabelecimento", b =>
                 {
                     b.Navigation("Agendamentos");
-
-                    b.Navigation("Categorias");
 
                     b.Navigation("Servicos");
                 });
