@@ -2,8 +2,9 @@ namespace PapayAgenda.Domain.Enums
 {
     public enum StatusAgendamento
     {
-        PendentePagamento = 0,
+        Pendente = 0,
         Confirmado = 1,
-        Cancelado = 2
+        Cancelado = 2,
+        Concluido = 3
     }
 }

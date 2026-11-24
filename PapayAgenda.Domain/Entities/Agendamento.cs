@@ -11,7 +11,7 @@ namespace PapayAgenda.Domain.Entities
         public DateTime DataHoraFim { get; set; }
         public decimal ValorTotal { get; set; }
         public decimal ValorSinal { get; set; }
-        public StatusAgendamento Status { get; set; } = StatusAgendamento.PendentePagamento;
+        public StatusAgendamento Status { get; set; } = StatusAgendamento.Pendente;
 
         // Controle de Notificação e Robô de 24h
         public bool Lembrete24hEnviado { get; set; } = false;
